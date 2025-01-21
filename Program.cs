@@ -1,5 +1,7 @@
 using hello_blazor.Components;
+using helloblazor.Models;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using System.Reflection;
 using System.Runtime;
 
 namespace hello_blazor
@@ -11,13 +13,13 @@ namespace hello_blazor
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
-			/*
+
 			builder.Services.AddRazorComponents()
 				.AddInteractiveServerComponents();
-			*/
 
 
-			builder.Services.AddAuthentication("cookie")
+
+			/*builder.Services.AddAuthentication("cookie")
 				.AddCookie("cookie")
 				.AddOpenIdConnect("meldrx", options =>
 				{
@@ -39,13 +41,24 @@ namespace hello_blazor
 					{
 						return Task.CompletedTask;
 					};
-				});
+				});*/
+			var envName = builder.Environment.EnvironmentName;
+			builder
+				.Configuration
+				.AddJsonFile("appsettings.json", true, true)
+				.AddJsonFile($"appsettings.{envName}.json")
+				.AddUserSecrets(Assembly.GetEntryAssembly()!) //null-forgiving
+				.AddEnvironmentVariables();
+
+			builder.Services.Configure<MeldrxSettings>(builder.Configuration.GetSection("MeldrxSettings"));
 
 			var app = builder.Build();
+			Console.WriteLine(builder.Environment.EnvironmentName);
 
-			app.MapGet("/hello", () => Results.Challenge(new Microsoft.AspNetCore.Authentication.AuthenticationProperties(), ["meldrx"]));
 
-			/*
+			//app.MapGet("/hello", () => Results.Challenge(new Microsoft.AspNetCore.Authentication.AuthenticationProperties(), ["meldrx"]));
+
+
 			// Configure the HTTP request pipeline.
 			if (!app.Environment.IsDevelopment())
 			{
@@ -61,7 +74,7 @@ namespace hello_blazor
 
 			app.MapRazorComponents<App>()
 				.AddInteractiveServerRenderMode();
-*/
+
 
 			app.Run();
 		}

@@ -1,5 +1,7 @@
 ﻿@page "/Error"
 @using System.Diagnostics
+@using Microsoft.Extensions.Options
+@using helloblazor.Models
 
 <PageTitle>Error</PageTitle>
 
@@ -31,6 +33,10 @@
     private string? RequestId { get; set; }
     private bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
-    protected override void OnInitialized() =>
+    protected override void OnInitialized()
+    {
         RequestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier;
+        Console.WriteLine("test");
+    }
+
 }

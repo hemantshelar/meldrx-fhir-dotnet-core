@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>hello-blazor</RootNamespace>
     <AssemblyName>$(AssemblyName.Replace(' ', '_'))</AssemblyName>
+    <UserSecretsId>0edb9500-5845-494d-91a5-3ada9e604abd</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

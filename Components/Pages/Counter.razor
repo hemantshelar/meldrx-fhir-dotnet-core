@@ -1,4 +1,6 @@
 ﻿@page "/counter"
+@using Microsoft.Extensions.Options
+@using helloblazor.Models
 @rendermode InteractiveServer
 
 <PageTitle>Counter</PageTitle>
@@ -11,6 +13,9 @@
 
 @code {
     private int currentCount = 0;
+
+    [Inject]
+    public IOptions<MeldrxSettings> AppSettings { get; set; }
 
     private void IncrementCount()
     {
