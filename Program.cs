@@ -6,20 +6,20 @@ using System.Runtime;
 
 namespace hello_blazor
 {
-	public class Program
-	{
-		public static void Main(string[] args)
-		{
-			var builder = WebApplication.CreateBuilder(args);
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-			// Add services to the container.
+            // Add services to the container.
 
-			builder.Services.AddRazorComponents()
-				.AddInteractiveServerComponents();
+            builder.Services.AddRazorComponents()
+                .AddInteractiveServerComponents();
 
 
 
-			/*builder.Services.AddAuthentication("cookie")
+            /*builder.Services.AddAuthentication("cookie")
 				.AddCookie("cookie")
 				.AddOpenIdConnect("meldrx", options =>
 				{
@@ -42,41 +42,42 @@ namespace hello_blazor
 						return Task.CompletedTask;
 					};
 				});*/
-			var envName = builder.Environment.EnvironmentName;
-			builder
-				.Configuration
-				.AddJsonFile("appsettings.json", true, true)
-				.AddJsonFile($"appsettings.{envName}.json")
-				.AddUserSecrets(Assembly.GetEntryAssembly()!) //null-forgiving
-				.AddEnvironmentVariables();
+            var envName = builder.Environment.EnvironmentName;
+            builder
+                .Configuration
+                .AddJsonFile($"appsettings.json")
+                .AddJsonFile($"appsettings.{envName}.json")
+                .AddUserSecrets(Assembly.GetEntryAssembly()!) //null-forgiving
+                .AddEnvironmentVariables();
 
-			builder.Services.Configure<MeldrxSettings>(builder.Configuration.GetSection("MeldrxSettings"));
+            IConfigurationSection meldrxSettings = builder.Configuration.GetSection("MeldrxSettings");
+            builder.Services.Configure<MeldrxSettings>(builder.Configuration.GetSection("MeldrxSettings"));
 
-			var app = builder.Build();
-			Console.WriteLine(builder.Environment.EnvironmentName);
-
-
-			//app.MapGet("/hello", () => Results.Challenge(new Microsoft.AspNetCore.Authentication.AuthenticationProperties(), ["meldrx"]));
+            var app = builder.Build();
+            Console.WriteLine(builder.Environment.EnvironmentName);
 
 
-			// Configure the HTTP request pipeline.
-			if (!app.Environment.IsDevelopment())
-			{
-				app.UseExceptionHandler("/Error");
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-				app.UseHsts();
-			}
-
-			app.UseHttpsRedirection();
-
-			app.UseStaticFiles();
-			app.UseAntiforgery();
-
-			app.MapRazorComponents<App>()
-				.AddInteractiveServerRenderMode();
+            //app.MapGet("/hello", () => Results.Challenge(new Microsoft.AspNetCore.Authentication.AuthenticationProperties(), ["meldrx"]));
 
 
-			app.Run();
-		}
-	}
+            // Configure the HTTP request pipeline.
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
+            app.UseAntiforgery();
+
+            app.MapRazorComponents<App>()
+                .AddInteractiveServerRenderMode();
+
+
+            app.Run();
+        }
+    }
 }
